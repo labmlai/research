@@ -44,6 +44,7 @@ Then it rotates the weighted sum $\hat{o}^{(j)}_n$ in the the reverse direction 
 
 Note that,
 
+$$
 \begin{align}
 RoPE\big(x^{(1)}_m, x^{(2)}_m, m\big) &=
 \begin{pmatrix}
@@ -60,7 +61,11 @@ x^{(1)}_m \cos m\theta - x^{(2)}_m \sin m \theta \\
 x^{(2)}_m \cos m\theta + x^{(1)}_m \sin m \theta \\
 \end{pmatrix} \\
 \end{align}
+$$
+
 Final output after with the transformations is,
+
+$$
 \begin{align}
 RoPE\big(\hat{o}^{(1)}_n, \hat{o}^{(2)}_n, -n\big) &= \\
 \begin{pmatrix}
@@ -68,8 +73,12 @@ RoPE\big(\hat{o}^{(1)}_n, \hat{o}^{(2)}_n, -n\big) &= \\
 \hat{o}^{(2)}_n \cos n\theta - \hat{o}^{(1)}_n \sin n \theta \\
 \end{pmatrix} \\
 \end{align}
+$$
+
 *Note that *$\sin (-n \theta) = -\sin n \theta$.
 Let's expand the first term $\hat{o}^{(1)}_n \cos n\theta + \hat{o}^{(2)}_n \sin n \theta$,
+
+$$
 \begin{align}
 \hat{o}^{(1)}_n \cos n\theta + \hat{o}^{(2)}_n \sin n \theta &= \\
 \sum_i a_{n,i} \hat{v}^{(1)}_i \cos n\theta + \sum_i a_{n,i} \hat{v}^{(2)}_i \sin n \theta &= \\
@@ -80,9 +89,15 @@ Let's expand the first term $\hat{o}^{(1)}_n \cos n\theta + \hat{o}^{(2)}_n \sin
 \sum_i a_{n,i} v^{(1)}_i \cos (i - n) \theta - \sum_i a_{n,i} v^{(2)}_i \sin (i - n) \theta &= \\
 \sum_i a_{n,i} v^{(1)}_i \cos (i - n) \theta - \sum_i a_{n,i} v^{(2)}_i \sin (i - n) \theta
 \end{align}
+$$
+
 Simiarly we can show the second term is equal to,
+
 $$\sum_i a_{n,i} v^{(1)}_i \cos (i - n) \theta + \sum_i a_{n,i} v^{(2)}_i \sin (i - n) \theta$$
+
 Which gives,
+
+$$
 \begin{align}
 RoPE\big(\hat{o}^{(1)}_n, \hat{o}^{(2)}_n, -n\big) &= \\
 \begin{pmatrix}
@@ -91,6 +106,7 @@ RoPE\big(\hat{o}^{(1)}_n, \hat{o}^{(2)}_n, -n\big) &= \\
 \end{pmatrix} &= \\
 \sum_i a_{n,i} RoPE \big (v^{(1)}_i, v^{(1)}_i, (i - n) \theta \big)
 \end{align}
+$$
 
 That is, the weighted average of values rotated relative to current position.
 
