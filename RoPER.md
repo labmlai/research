@@ -1,15 +1,26 @@
 # Rotary Positional Embeddings with Relative distances (RoPER)
 
-Rotary Positional Embeddings (RoPE) (Su et al., 2021) use relative positions in attention score calculation. However, in RoPE, no positional information (relative or otherwise) is added to embeddings. 
+Rotary Positional Embeddings (RoPE) 
+([Su et al., 2021](https://papers.labml.ai/paper/a0708356b79611ebbd9b8f626bc6f333))
+use relative positions in attention score calculation.
+However, in RoPE, no positional information (relative or otherwise) is added to embeddings. 
 
-We investigate adding relative positions of the tokens it pays attention to, to the values of the attention calculation. We call this method RoPER. We evaluate the method and compare it with RoPE in a couple of algorithmic tasks and show that RoPER performs better. We also try it on a language model and show that RoPER doesn’t degrade performance compared to RoPE.
-Background
+We investigate adding relative positions of the tokens it pays attention to, to the values of the attention calculation.
+We call this method RoPER. We evaluate the method and compare it with RoPE in a couple of algorithmic
+tasks and show that RoPER performs better.
+We also try it on a language model and show that RoPER doesn’t degrade performance compared to RoPE.
 
-RoPE rotates pairs of features in a 2D plane, by an angle that is a multiple of their position in the modeled sequence. When such a pair participates in dot-product attention only the relative positional difference between that pair and the other pair of embeddings affects the result. 
+## Background
 
-RoPE has shown to be successful in language modeling and is widely being used (Chowdhery et al., 2022).
+RoPE rotates pairs of features in a 2D plane, by an angle that is a multiple of their position in the modeled sequence.
+When such a pair participates in dot-product attention only the relative positional difference between
+that pair and the other pair of embeddings affects the result. 
 
-It has also been shown that auto-regressive transformers can implicitly acquire positional information (Haviv et al., 2022).
+RoPE has shown to be successful in language modeling and is widely being used
+([Chowdhery et al., 2022](https://papers.labml.ai/paper/eb71aa3ab55611ecac827bce58715ee7)).
+
+It has also been shown that auto-regressive transformers can implicitly acquire positional information 
+([Haviv et al., 2022](https://papers.labml.ai/paper/2c364684b15b11ecac827bce58715ee7)).
 
 ## Method
 
