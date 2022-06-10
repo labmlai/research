@@ -114,15 +114,15 @@ That is, the weighted average of values rotated relative to current position.
 
 We compare RoPER with RoPE on a couple of algorithmic tasks. We also show that RoPER performs similar to RoPE on language modeling with a small 200M parameter transformer.
 
-For the Arithmetic Addition and the Substring by Index tasks we use a ~20M parameter model (512 embedding, 6 layers, 8 heads, post layer norm). And we sequence of length 641 for training and a batch size of 32.. For both these tasks we report the accuracy of solving the problem after 5,000 training steps. We test the number of correct solutions with random sampling for 128 problems.
+For the Arithmetic Addition and the Substring by Index tasks we use a ~20M parameter model (512 embedding, 6 layers, 8 heads, post layer norm). We sequence of length 641 for training and a batch size of 32.. For both these tasks we report the accuracy of solving the problem after 5,000 training steps. We test the number of correct solutions with random sampling for 128 problems.
 
-For the Substring by Search task we use a ~0.6M parameter model (128 embedding, 3 layers, 4 heads, pre-layer norm).
+For the Substring by Search task we use a ~0.6M parameter model (128 embedding, 3 layers, 4 heads, pre-layer norm). We train of sequences of length 513 with a batch size of 16. and we report the final loss after 65,000 steps.
 
-| Task              | RoPE  | RoPER |
-|-------------------|-------|-------|
-|Arithmetic Addition|124.33 |126.33 |
-|Substring by Index |62.00  |96.11  |
-|Substring by Prefix|0.3329 |0.3205 |
+| Task              | RoPE  | RoPER    |
+|-------------------|-------|----------|
+|Arithmetic Addition|124.33 |**126.33**|
+|Substring by Index |62.00  |**96.11** |
+|Substring by Prefix|0.3329 |**0.3205**|
 
 ### Arithmetic Addition
 
@@ -160,7 +160,7 @@ Example:
 ?s='dyjeofuxvejmg'; s[8:]=='vejmg'#?s='syoktpufifxes'; s[0:]=='syoktpufifxes'#?s='xpbssshucfolp'; s[0:]=='xpbssshucfolp'#?s='wmyapfpvbqdih'; s[9:]=='qdih'#?s='pwndggwvwcueg'; s[3:]=='dggwvwcueg'#?s='liphezyxyaigw'; s[10:]=='igw'#?s='nsadijatrvnsg'; s[2:]=='adijatrvnsg'#?s='gbakpiyhgcycd'; s[12:]=='d'#?s='irrpifewmjbpu'; s[7:]=='wmjbpu'#?s='trdpewjdofkbf'; s[0:]=='trdpewjdofkbf'#?s='bwangjzypgdtw'; s[10:]=='dtw'#?s='lmmufvskwuiti'; s[4:]=='fvskwuiti'#?s='opllhzhjmliiu'; s[5:]=='zhjmliiu'#?s='gcakbhiepmknz'; s[0:]=='gcakbhiepmknz'#?s='cjnmugcjhvvla'; s[0:]=='cjnmugcjhvvla'#?s='ternjenddpljw'; s[5:]=='enddpljw'#?s='pvceminiczzjv'; s[10:]=='zjv'#
 ```
 
-### Substring by Search
+### Substring by Prefix
 
 In this problem the model has to retrieve (complete) fixed length substrings by searching them. 
 
