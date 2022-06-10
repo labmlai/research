@@ -175,3 +175,15 @@ This chart shows the final half of mean loss curves with both methods
 ### Language modeling
 
 ## Discussion
+
+#### Citing this blog post
+
+```text
+@misc{harik2022roper,
+    author = {Georges Harik, Varuna Jayasiri},
+    title  = {Rotary Positional Embeddings with Relative distances},
+    url    = {http://research.labml.ai/RoPER.html},
+    year   = {2022}
+}
+```
+
