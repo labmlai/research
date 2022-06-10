@@ -93,11 +93,11 @@ That is, the weighted average of values rotated relative to current position.
 
 We compare RoPER with RoPE on three algorithmic tasks. We also show that RoPER performs similar to RoPE on language modeling with a small 200M parameter transformer.
 
-For the Arithmetic Addition and the Substring by Index tasks we use a ~20M parameter model (512 embedding, 6 layers, 8 heads, post layer norm). We sequence of length 641 for training and a batch size of 32.. For both these tasks we report the accuracy of solving the problem after 5,000 training steps. We test the number of correct solutions with random sampling for 128 problems.
+For the Arithmetic Addition and the Substring by Index tasks, we use a ~20M parameter model (512 embedding size, 6 layers, 8 heads, post layer norm). We sequence of length 641 for training and a batch size of 32.. For both these tasks, we report the accuracy of solving the problem after 5,000 training steps. We test the number of correct solutions with random sampling for 128 problems.
 
-For the Substring by Search task we use a ~0.6M parameter model (128 embedding, 3 layers, 4 heads, pre-layer norm). We train of sequences of length 513 with a batch size of 16. and we report the final loss after 65,000 steps.
+For the Substring by Search task, we use a ~0.6M parameter model (128 embedding size, 3 layers, 4 heads, pre-layer norm). We train of sequences of length 513 with a batch size of 16. and we report the final loss after 65,000 steps.
 
-For all three tasks we ran 10 training sessions with both methods and reported the mean of the 9 tasks after removing the worst session. This seemed to be fair by RoPE becaase it had a pretty bad run on the Substring by Index task. We applied the same for all three tasks for consistency.
+For all three tasks, we ran 10 training sessions with both methods and reported the mean of the 9 tasks after removing the worst session.
 
 $$
 \begin{matrix}
@@ -173,8 +173,6 @@ This chart shows the final half of mean loss curves with both methods
 ![Mean Loss](roper_substring_prefix_avg.png)
 
 ### Language modeling
-
-## Discussion
 
 #### Citing this blog post
 

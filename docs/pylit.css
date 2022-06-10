@@ -65,6 +65,9 @@ div.footer a {
   font-size: 1.3rem;
 }
 
+div.section div.docs {
+  max-width: 800px;
+}
 div.section div.docs .section-link {
   position: relative;
 }
