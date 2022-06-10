@@ -1,5 +1,7 @@
 # Rotary Positional Embeddings with Relative distances (RoPER)
 
+by Georges Hark and Varuna Jayasiri
+
 Rotary Positional Embeddings (RoPE) 
 ([Su et al., 2021](https://papers.labml.ai/paper/a0708356b79611ebbd9b8f626bc6f333))
 use relative positions in attention score calculation.
@@ -39,25 +41,25 @@ For any head, let $a_{n,i}$ be the attention from query position $n$ to value po
 and $v_i$ be the value embeddings at position $i$. Let's denote individual features
 as $v^{(1)}_i, v^{(2)}_i, \dots$.
 
-Normally, we would take the weight sum of value embeddings
+Normally, we would take the weighted sum of value embeddings
 $$o^{(j)}_n = \sum_i a_{n,i} v^{(j)}_i$$
 
 This doesn't explicitly add any distance information about the positions $i$ to final
 result $o^{(j)}_n$.
-RoPER pairs features like RoPE and transform them.
-For a pair $v^{(1)}_m$ and $v^{(2)}_m$ it transforms them by
- $RoPE\big(v^{(1)}_m, v^{(2)}_m, m\big)$.
 
-Let us donate the transformed features with $\hat{v}^{(1)}_m, \hat{v}^{(2)}_m$.
-Then it rotates the weighted sum $\hat{o}^{(j)}_n$ in the the reverse direction with
- $RoPE\big(\hat{o}^{(1)}_n, \hat{o}^{(2)}_n, -n\big)$.
-*Note the *$-n$.
+RoPER transforms the value embeddings with $RoPE$ and then transformers the weighted sum
+with $RoPE$ but in opposite direction.
+
+For a pair $(1)$ and $(2)$ it transforms $v_m$ with
+ $RoPE\left(v^{(1)}_m, v^{(2)}_m, m\right)$,
+ and then it rotates the weighted sum $\hat{o}_n$ in the the reverse direction with
+ $RoPE\left(\hat{o}^{(1)}_n, \hat{o}^{(2)}_n, -n\right)$.
+
 
 Note that,
 
-$$
 \begin{align}
-RoPE\big(x^{(1)}_m, x^{(2)}_m, m\big) &=
+RoPE\left(x^{(1)}_m, x^{(2)}_m, m\right) &=
 \begin{pmatrix}
 \cos m \theta & - \sin m \theta \\
 \sin m \theta & \cos m \theta
@@ -65,75 +67,47 @@ RoPE\big(x^{(1)}_m, x^{(2)}_m, m\big) &=
 \begin{pmatrix}
 x^{(1)}_m \\
 x^{(2)}_m \\
-\end{pmatrix} \\
-&=
-\begin{pmatrix}
-x^{(1)}_m \cos m\theta - x^{(2)}_m \sin m \theta \\
-x^{(2)}_m \cos m\theta + x^{(1)}_m \sin m \theta \\
-\end{pmatrix} \\
+\end{pmatrix}
 \end{align}
-$$
 
-Final output after with the transformations is,
 
-$$
+Therefore, final output after with the transformations is,
+
 \begin{align}
-RoPE\big(\hat{o}^{(1)}_n, \hat{o}^{(2)}_n, -n\big) &= \\
+RoPE\left(\hat{o}^{(1)}_n, \hat{o}^{(2)}_n, -n\right) &=
 \begin{pmatrix}
 \hat{o}^{(1)}_n \cos n\theta + \hat{o}^{(2)}_n \sin n \theta \\
 \hat{o}^{(2)}_n \cos n\theta - \hat{o}^{(1)}_n \sin n \theta \\
 \end{pmatrix} \\
-\end{align}
-$$
-
-*Note that *$\sin (-n \theta) = -\sin n \theta$.
-Let's expand the first term $\hat{o}^{(1)}_n \cos n\theta + \hat{o}^{(2)}_n \sin n \theta$,
-
-$$
-\begin{align}
-\hat{o}^{(1)}_n \cos n\theta + \hat{o}^{(2)}_n \sin n \theta &= \\
-\sum_i a_{n,i} \hat{v}^{(1)}_i \cos n\theta + \sum_i a_{n,i} \hat{v}^{(2)}_i \sin n \theta &= \\
-\sum_i a_{n,i} \Big( v^{(1)}_i \cos i\theta - v^{(2)}_i \sin i \theta \Big) \cos n\theta &+ \\
-\sum_i a_{n,i} \Big( v^{(2)}_i \cos i\theta + v^{(1)}_i \sin i \theta \Big) \sin m \theta &= \\
-\sum_i a_{n,i} v^{(1)}_i \Big( \cos i\theta \cos n\theta + \sin i \theta \sin n \theta \Big) &+ \\
-\sum_i a_{n,i} v^{(2)}_i \Big( \cos i\theta \sin n\theta - \sin i \theta \cos n \theta \Big) &= \\
-\sum_i a_{n,i} v^{(1)}_i \cos (i - n) \theta - \sum_i a_{n,i} v^{(2)}_i \sin (i - n) \theta &= \\
-\sum_i a_{n,i} v^{(1)}_i \cos (i - n) \theta - \sum_i a_{n,i} v^{(2)}_i \sin (i - n) \theta
-\end{align}
-$$
-
-Simiarly we can show the second term is equal to,
-
-$$\sum_i a_{n,i} v^{(1)}_i \cos (i - n) \theta + \sum_i a_{n,i} v^{(2)}_i \sin (i - n) \theta$$
-
-Which gives,
-
-$$
-\begin{align}
-RoPE\big(\hat{o}^{(1)}_n, \hat{o}^{(2)}_n, -n\big) &= \\
+&= 
 \begin{pmatrix}
 \sum_i a_{n,i} v^{(1)}_i \cos (i - n) \theta - \sum_i a_{n,i} v^{(2)}_i \sin (i - n) \theta \\
-\sum_i a_{n,i} v^{(1)}_i \cos (i - n) \theta + \sum_i a_{n,i} v^{(2)}_i \sin (i - n) \theta \\
-\end{pmatrix} &= \\
-\sum_i a_{n,i} RoPE \big (v^{(1)}_i, v^{(1)}_i, (i - n) \theta \big)
+\sum_i a_{n,i} v^{(2)}_i \cos (i - n) \theta + \sum_i a_{n,i} v^{(1)}_i \sin (i - n) \theta \\
+\end{pmatrix} \\ &=
+\sum_i a_{n,i} RoPE \left (v^{(1)}_i, v^{(2)}_i, (i - n) \theta \right)
 \end{align}
-$$
 
 That is, the weighted average of values rotated relative to current position.
 
 ## Analysis
 
-We compare RoPER with RoPE on a couple of algorithmic tasks. We also show that RoPER performs similar to RoPE on language modeling with a small 200M parameter transformer.
+We compare RoPER with RoPE on three algorithmic tasks. We also show that RoPER performs similar to RoPE on language modeling with a small 200M parameter transformer.
 
 For the Arithmetic Addition and the Substring by Index tasks we use a ~20M parameter model (512 embedding, 6 layers, 8 heads, post layer norm). We sequence of length 641 for training and a batch size of 32.. For both these tasks we report the accuracy of solving the problem after 5,000 training steps. We test the number of correct solutions with random sampling for 128 problems.
 
 For the Substring by Search task we use a ~0.6M parameter model (128 embedding, 3 layers, 4 heads, pre-layer norm). We train of sequences of length 513 with a batch size of 16. and we report the final loss after 65,000 steps.
 
-| Task              | RoPE  | RoPER    |
-|-------------------|-------|----------|
-|Arithmetic Addition|124.33 |**126.33**|
-|Substring by Index |62.00  |**96.11** |
-|Substring by Prefix|0.3329 |**0.3205**|
+For all three tasks we ran 10 training sessions with both methods and reported the mean of the 9 tasks after removing the worst session. This seemed to be fair by RoPE becaase it had a pretty bad run on the Substring by Index task. We applied the same for all three tasks for consistency.
+
+$$
+\begin{matrix}
+ \text{Task} & \text{RoPE} & \text{RoPER} \\
+ \hline
+\text{Arithmetic Addition} & 124.33 & \mathbf{126.33} \\
+\text{Substring by Index}  & 62.00  & \mathbf{96.11}  \\
+\text{Substring by Prefix} & 0.3269 & \mathbf{0.3191} \\
+\end{matrix}
+$$
 
 ### Arithmetic Addition
 
@@ -141,7 +115,7 @@ In this task we test the model’s capacity to solve step-by-step arithmetic add
 
 Problem format:
 
-```
+```text
 ?d=[number1]+[number2]; [steps] d==[final result]#
 ```
 
@@ -150,8 +124,12 @@ We concatenate multiple problems in the same sequence. We use up to 8 digit numb
 
 Here’s an example:
 
-```
-?d=77+38446365; 7e0+5e0+0e0==12e0 and 7e1+6e1+1e1==14e1 and 0e2+3e2+1e2==4e2 and 0e3+6e3+0e3==6e3 and 0e4+4e4+0e4==4e4 and 0e5+4e5+0e5==4e5 and 0e6+8e6+0e6==8e6 and 0e7+3e7+0e7==3e7 and d==38446442#?d=66623+401; 3e0+1e0+0e0==4e0 and 2e1+0e1+0e1==2e1 and 6e2+4e2+0e2==10e2 and 6e3+0e3+1e3==7e3 and 6e4+0e4+0e4==6e4 and d==67024#?d=25481082+3301219; 2e0+9e0+0e0==11e0 and 8e1+1e1+1e1==10e1 and 0e2+2e2+1e2==3e2 and 1e3+1e3+0e3==2e3 and 8e4+0e4+0e4==8e4 and 4e5+3e5+0e5==7e5 and 5e6+3e6+0e6==8e6 and 2e7+0e7+0e7==2e7 and d==28782301#?d=577790+20083146; 0e0+6e0+0e0==6e0 and 9e1+4e1+0e1==13e1 and 7e2+1e2+1e2==9e2 and 7e3+3e3+0e3==10e3 and 7e4+8e4+1e4==16e4 and 5e5+0e5+1e5==6e5 and 0e6+0e6+0e6==0e6 and 0e7+2e7+0e7==2e7 and d==20660936#
+```text
+?d=77+38446365; 7e0+5e0+0e0==12e0 and 7e1+6e1+1e1==14e1 and 0e2+3e2+1e2==4e2 and 
+0e3+6e3+0e3==6e3 and 0e4+4e4+0e4==4e4 and 0e5+4e5+0e5==4e5 and 0e6+8e6+0e6==8e6 and 
+0e7+3e7+0e7==3e7 and d==38446442#?d=66623+401; 3e0+1e0+0e0==4e0 and 2e1+0e1+0e1==2e1 and 
+6e2+4e2+0e2==10e2 and 6e3+0e3+1e3==7e3 and 6e4+0e4+0e4==6e4 and d==67024#?d=25481082+3301219; 
+...
 ```
 
 ### Substring by index
@@ -159,16 +137,17 @@ Here’s an example:
 In this problem the model has to retrieve a suffix of a string.
 
 Problem Format:
-```
-?s=’[string]’; s[[index]:]==’[suffix]’#
+
+```text
+?s='[string]'; s[[index]:]=='[suffix]'#
 ```
 
 We concatenate multiple problems in the same sequence. We use upto 8 digits number for this problem.
 
 Example:
 
-```
-?s='dyjeofuxvejmg'; s[8:]=='vejmg'#?s='syoktpufifxes'; s[0:]=='syoktpufifxes'#?s='xpbssshucfolp'; s[0:]=='xpbssshucfolp'#?s='wmyapfpvbqdih'; s[9:]=='qdih'#?s='pwndggwvwcueg'; s[3:]=='dggwvwcueg'#?s='liphezyxyaigw'; s[10:]=='igw'#?s='nsadijatrvnsg'; s[2:]=='adijatrvnsg'#?s='gbakpiyhgcycd'; s[12:]=='d'#?s='irrpifewmjbpu'; s[7:]=='wmjbpu'#?s='trdpewjdofkbf'; s[0:]=='trdpewjdofkbf'#?s='bwangjzypgdtw'; s[10:]=='dtw'#?s='lmmufvskwuiti'; s[4:]=='fvskwuiti'#?s='opllhzhjmliiu'; s[5:]=='zhjmliiu'#?s='gcakbhiepmknz'; s[0:]=='gcakbhiepmknz'#?s='cjnmugcjhvvla'; s[0:]=='cjnmugcjhvvla'#?s='ternjenddpljw'; s[5:]=='enddpljw'#?s='pvceminiczzjv'; s[10:]=='zjv'#
+```text
+?s='dyjeofuxvejmg'; s[8:]=='vejmg'#?s='syoktpufifxes'; ...
 ```
 
 ### Substring by Prefix
@@ -177,13 +156,21 @@ In this problem the model has to retrieve (complete) fixed length substrings by 
 
 Problem Format:
 
-```
+```text
 [random_string]>[substring][random_string]>[substring][random_string]...
 ```
 
 We randomly select a substring of the current sequence (except `>` tokens), and append it to the sequence, followed by a random string string. This is repeated until the total length is equal to the sequence length.
 
 To make the task harder we only use a small vocabulary of size 4.
+
+This chart shows the final half of loss curves of the individual training sessions with RoPE and RoPER.
+
+![Runs](roper_substring_prefix_runs.png)
+
+This chart shows the final half of mean loss curves with both methods
+
+![Mean Loss](roper_substring_prefix_avg.png)
 
 ### Language modeling
 
