@@ -98,21 +98,21 @@ That is, the weighted average of values rotated relative to current position.
 
 ## Analysis
 
-We compare RoPER with RoPE on three algorithmic tasks. We also show that RoPER performs similar to RoPE on language modeling with a small 200M parameter transformer.
+We compare RoPER with RoPE on three algorithmic tasks. We also show that RoPER performs similar to RoPE on language modeling with a small 200 million parameter transformer.
 
-For the Arithmetic Addition and the Substring by Index tasks, we use a ~20M parameter model (512 embedding size, 6 layers, 8 heads, post layer norm). We sequence of length 641 for training and a batch size of 32.. For both these tasks, we report the accuracy of solving the problem after 5,000 training steps. We test the number of correct solutions with random sampling for 128 problems.
+For the Arithmetic Addition and the Substring by Index tasks, we use a 20 million parameter model (512 embedding size, 6 layers, 8 heads, post layer norm). We sequence of length 641 for training and a batch size of 32.. For both these tasks, we report the accuracy of solving the problem after 5,000 training steps. We test the number of correct solutions with random sampling for 128 problems.
 
-For the Substring by Search task, we use a ~0.6M parameter model (128 embedding size, 3 layers, 4 heads, pre-layer norm). We train of sequences of length 513 with a batch size of 16. and we report the final loss after 65,000 steps.
+For the Substring by Search task, we use a 0.6 million parameter model (128 embedding size, 3 layers, 4 heads, pre-layer norm). We train of sequences of length 513 with a batch size of 16. and we report the final loss after 65,000 steps.
 
-For all three tasks, we ran 10 training sessions with both methods and reported the mean of the 9 tasks after removing the worst session.
+We used a character level tokenizer for all three tasks. We ran 10 training sessions with both methods and reported the mean of the 9 tasks after removing the worst session.
 
 $$
 \begin{matrix}
- \text{Task} & \text{RoPE} & \text{RoPER} \\
+ \text{Task} &  \text{RoPE} & \text{RoPER} & \\
  \hline
-\text{Arithmetic Addition} & 124.33 & \mathbf{126.33} \\
-\text{Substring by Index}  & 62.00  & \mathbf{96.11}  \\
-\text{Substring by Prefix} & 0.3269 & \mathbf{0.3191} \\
+\text{Arithmetic Addition}  & 124.33 & \mathbf{126.33} & \text{\small{score (higher is better)}}\\
+\text{Substring by Index}  & 62.00  & \mathbf{96.11} & \text{\small{score (higher is better)}}   \\
+\text{Substring by Prefix} & 0.3269 & \mathbf{0.3191} & \text{\small{loss (lower is better)}} \\
 \end{matrix}
 $$
 
@@ -181,7 +181,11 @@ This chart shows the final half of mean loss curves with both methods
 
 ### Language modeling
 
-This is the training and validation losses of a 200M parameter langauge model trained on Wikipedia dataset. Both runs show similar losses and we can see that RoPER doesn't hurt the models language modelling capabilities.
+This is the training and validation losses of a 200 million parameter langauge model trained on
+English Wikipedia dataset.
+We used [sentence piece](https://github.com/google/sentencepiece) tokenizer with a vocabulary size of 32,000.
+
+Both runs show similar losses and we can see that RoPER doesn't hurt language modelling capabilities.
 
 ![Loss](roper_lm.png)
 
