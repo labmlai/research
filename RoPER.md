@@ -1,3 +1,10 @@
+---
+title: Rotary Positional Embeddings with Relative distances (RoPER)
+summary: >
+  RoPER, in addition to using relative positions in the attention score calculation,
+  adds relative positional information explicitly to value embeddings.
+---
+
 # Rotary Positional Embeddings with Relative distances (RoPER)
 
 by Georges Hark and Varuna Jayasiri
