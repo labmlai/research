@@ -100,7 +100,7 @@ That is, the weighted average of values rotated relative to current position.
 
 We compare RoPER with RoPE on three algorithmic tasks. We also show that RoPER performs similar to RoPE on language modeling with a small 200 million parameter transformer.
 
-For the Arithmetic Addition and the Substring by Index tasks, we use a 20 million parameter model (512 embedding size, 6 layers, 8 heads, post layer norm). We sequence of length 641 for training and a batch size of 32.. For both these tasks, we report the accuracy of solving the problem after 5,000 training steps. We test the number of correct solutions with random sampling for 128 problems.
+For the Arithmetic Addition and the Substring by Index tasks, we use a 20 million parameter model (512 embedding size, 6 layers, 8 heads, post layer norm). We sequence of length 641 for training and a batch size of 32. For both these tasks, we report the accuracy of solving the problem after 5,000 training steps. We test the number of correct solutions with random sampling for 128 problems.
 
 For the Substring by Search task, we use a 0.6 million parameter model (128 embedding size, 3 layers, 4 heads, pre-layer norm). We train of sequences of length 513 with a batch size of 16. and we report the final loss after 65,000 steps.
 
