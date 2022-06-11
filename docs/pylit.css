@@ -67,6 +67,12 @@ div.footer a {
 
 div.section div.docs {
   max-width: 800px;
+  padding: 10px 10px;
+}
+@media (min-width: 850px) {
+  div.section div.docs {
+    padding: 10px 25px;
+  }
 }
 div.section div.docs .section-link {
   position: relative;

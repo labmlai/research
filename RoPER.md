@@ -174,6 +174,10 @@ This chart shows the final half of mean loss curves with both methods
 
 ### Language modeling
 
+This is the training and validation losses of a 200M parameter langauge model trained on Wikipedia dataset. Both runs show similar losses and we can see that RoPER doesn't hurt the models language modelling capabilities.
+
+![Loss](roper_lm.png)
+
 #### Citing this blog post
 
 ```text
