@@ -7,7 +7,7 @@ summary: >
 
 # Rotary Positional Embeddings with Relative distances (RoPER)
 
-by [Georges Hark](https://twitter.com/gharik) and [Varuna Jayasiri](https://twitter.com/vpj)
+by [Georges Harik](https://twitter.com/gharik) and [Varuna Jayasiri](https://twitter.com/vpj)
 
 Rotary Positional Embeddings (RoPE) 
 ([Su et al., 2021](https://papers.labml.ai/paper/a0708356b79611ebbd9b8f626bc6f333))
