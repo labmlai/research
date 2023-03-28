@@ -189,6 +189,8 @@ Both runs show similar losses and we can see that RoPER doesn't hurt language mo
 
 ![Loss](roper_lm.png)
 
+Later results have shown 1% loglikelihood improvements over RoPE in a 3b parameter transformer trained for same number of steps.
+
 #### Citing this blog post
 
 ```text
